@@ -32,7 +32,7 @@ repositories {
 }
 
 configurations {
-   //androidTestCompile.exclude module: 'org.eclipse.paho.client.mqttv3'
+    //androidTestCompile.exclude module: 'org.eclipse.paho.client.mqttv3'
 }
 
 dependencies {
@@ -47,7 +47,7 @@ android.libraryVariants.all { variant ->
         description "Generates Javadoc for $variant.name."
         source = variant.javaCompile.source
         ext.androidJar =
-                "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+            "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
         classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
         options.links("http://docs.oracle.com/javase/7/docs/api/");
         options.links("http://d.android.com/reference/");
@@ -84,7 +84,7 @@ task("generateLibraryJar", type: Jar) {
 }
 
 // Generate Javadoc
-task("generateJavaDocJar", type: Jar, dependsOn: (rootProject.ext.serviceVersion.endsWith('-SNAPSHOT') ? 'generatedebugJavadoc' : 'generatereleaseJavadoc')){
+task("generateJavaDocJar", type: Jar, dependsOn: (rootProject.ext.serviceVersion.endsWith('-SNAPSHOT') ? 'generatedebugJavadoc' : 'generatereleaseJavadoc')) {
     from("$buildDir/docs/javadoc")
     classifier = 'javadoc'
 }
@@ -118,13 +118,17 @@ publishing {
 }
 
 
-task debug << {
-    configurations.compile.each { println it}
+task debug {
+    doLast {
+        configurations.compile.each { println it }
+    }
 }
+
 // Required to bundle Java library Jar in AAR
-clean.doLast{
+clean.doLast {
     copyLibs.execute()
 }
+
 assemble.doLast {
     renameReleaseAAR.execute()
 }
